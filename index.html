@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Drive Logger</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <span class="car-icon">🚗</span>
+                <h1>Vehicle Drive Logger</h1>
+            </div>
+            <p class="subtitle">Track your vehicle trips, mileage, and driving time</p>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Distance</span>
+                    <span class="stat-icon">📍</span>
+                </div>
+                <div class="stat-value" id="totalDistance">0.0 mi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Duration</span>
+                    <span class="stat-icon">⏱️</span>
+                </div>
+                <div class="stat-value" id="totalDuration">0.0 hrs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Avg Speed</span>
+                    <span class="stat-icon">📊</span>
+                </div>
+                <div class="stat-value" id="avgSpeed">0.0 mph</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">Total Trips</span>
+                    <span class="stat-icon">📅</span>
+                </div>
+                <div class="stat-value" id="totalTrips">0</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Trip Timer Section -->
+            <div class="timer-section">
+                <div class="timer-header">
+                    <span class="timer-icon">⏰</span>
+                    <span>Trip Timer</span>
+                </div>
+                <div class="timer-display" id="timerDisplay">00:00:00</div>
+                <div class="timer-status" id="timerStatus">Ready to start</div>
+                <button class="btn-primary" id="startTripBtn">
+                    <span>▶</span> Start Trip
+                </button>
+            </div>
+
+            <!-- Add Drive Log Form -->
+            <div class="form-section" id="formSection" style="display: none;">
+                <h2 class="form-title">Add New Drive Log</h2>
+                <form id="driveLogForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateInput">Date of Recording</label>
+                            <input type="date" id="dateInput" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="roadType">Road Type</label>
+                            <select id="roadType" required>
+                                <option value="">Select road type</option>
+                                <option value="highway">Highway</option>
+                                <option value="city">City</option>
+                                <option value="rural">Rural</option>
+                                <option value="mixed">Mixed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dayNight">Day/Night</label>
+                            <select id="dayNight" required>
+                                <option value="">Select day/night</option>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="vin">VIN</label>
+                            <input type="text" id="vin" placeholder="Enter VIN">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="driverName">Driver Name</label>
+                            <input type="text" id="driverName" placeholder="Enter driver name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="driverLicense">Driver License</label>
+                            <input type="text" id="driverLicense" placeholder="Enter driver license">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type="text" id="country" placeholder="Enter country">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" placeholder="Enter city">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="totalDistanceInput">Total Distance (miles)</label>
+                            <input type="number" id="totalDistanceInput" step="0.1" placeholder="0.0" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalDurationInput">Total Duration (hours)</label>
+                            <input type="number" id="totalDurationInput" step="0.01" placeholder="0.0" required readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avgSpeedInput">Average Speed (mph)</label>
+                        <input type="number" id="avgSpeedInput" step="0.1" placeholder="0.0" required readonly>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <span>+</span> Add Log Entry
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recent Drive Logs -->
+        <div class="logs-section">
+            <h2 class="section-title">Recent Drive Logs</h2>
+            <div class="logs-container" id="logsContainer">
+                <div class="empty-state">
+                    <span class="empty-icon">📝</span>
+                    <p>No drive logs yet. Add your first entry above.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <h2 class="section-title">
+                <span>📄</span> Export Logs
+            </h2>
+            <div class="export-buttons">
+                <button class="btn-export" id="exportCsvBtn">
+                    <span>⬇️</span> Download CSV
+                </button>
+                <button class="btn-export" id="exportJsonBtn">
+                    <span>⬇️</span> Download JSON
+                </button>
+                <button class="btn-export" id="emailLogsBtn">
+                    <span>✉️</span> Email Logs
+                </button>
+            </div>
+            <p class="export-note" id="exportNote">Add some logs to enable export</p>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal" id="emailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Email Logs</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recipientEmail">Recipient Email</label>
+                    <input type="email" id="recipientEmail" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailSubject">Subject</label>
+                    <input type="text" id="emailSubject" value="Vehicle Drive Logs" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailMessage">Message (Optional)</label>
+                    <textarea id="emailMessage" rows="4" placeholder="Add a message..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelEmail">Cancel</button>
+                <button class="btn-primary" id="sendEmail">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
